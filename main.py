@@ -1,13 +1,12 @@
 """"module imported to generate random number"""
 import random
 
+# it becomes true if the secret number has been guessed
 number_guessed = False
 
-def play(player, guess, guesses, secret_num, hint):
+def verify(player, guess, guesses, secret_num, hint):
     """compares players' guesses to the secret number"""
     guesses.append(guess)
-    if player == "Computer":
-        print("Computer: Enter your guess:", guess)
     if guess < secret_num:
         print("Wrong, too low!\n")
         hint.append("too low")
@@ -23,39 +22,39 @@ def play(player, guess, guesses, secret_num, hint):
 
 def computer_guess(last_guess, last_hint):
     """returns a number according to the hint"""
-    if last_guess == 0:
-        return random.randint(1, 100)
     if last_hint == "too low":
         return random.randint(last_guess+1, 100)
     if last_hint == "too high":
         return random.randint(1, last_guess-1)
+    return random.randint(1, 100)
 
-while True:
-    num_to_guess = random.randint(1, 100)
-    print(num_to_guess)
-    guesses_player = [0]
-    guesses_computer = [0]
-    hints =  ["", ""]
-    while not number_guessed:
-        print("----Player 1----")
-        player_num = int(input("Player 1: Enter your guess: "))
-        play("Player 1", player_num, guesses_player, num_to_guess, hints)
-        if number_guessed is True:
+if __name__ == "__main__":
+    while True:
+        num_to_guess = random.randint(1, 100)
+        print("Secret number: ", num_to_guess)
+        guesses_player = [0]
+        guesses_computer = [0]
+        hints =  ["", ""]
+        while not number_guessed:
+            print("----Player 1----")
+            player_num = int(input("Player 1: Enter your guess: "))
+            verify("Player 1", player_num, guesses_player, num_to_guess, hints)
+            if number_guessed is True:
+                break
+            player_num = computer_guess(guesses_computer[-1], hints[-2])
+            print("----Computer----\nComputer: Enter your guess:", player_num)
+            verify("Computer", player_num, guesses_computer, num_to_guess, hints)
+            if number_guessed is True:
+                break
+        playAgain = input("\nDo you want to play again? Type 'y' or 'n' ")
+        if playAgain == "y":
+            number_guessed = False
+        else:
+            print("Thank you for playing :)")
             break
-        print("----Computer----")
-        player_num = computer_guess(guesses_computer[-1], hints[-2])
-        play("Computer", player_num, guesses_computer, num_to_guess, hints)
-        if number_guessed is True:
-            break
-    playAgain = input("\nDo you want to play again? Type 'y' or 'n' ")
-    if playAgain == "y":
-        number_guessed = False
-    else:
-        print("Thank you for playing :)")
-        break
 
-
-
+# __name__
+# hacer que se ejecute
 
 
 # Versión Orientada a Objetos (OOP)
