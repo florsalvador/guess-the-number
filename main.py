@@ -3,7 +3,13 @@ import random
 
 
 def verify(guess, secret_num, guesses, hint):
-    """compares players' guesses to the secret number"""
+    """Compares players' guess to the secret number
+    Parameters:
+        guess: The number guessed by the player or computer.
+        secret_num: The number to guess.
+        guesses: The list of guesses made.
+        hint: The list of hints.
+    """
     guesses.append(guess)
     if guess < secret_num:
         print("Wrong, too low!\n")
@@ -20,7 +26,11 @@ def verify(guess, secret_num, guesses, hint):
 
 
 def computer_guess(last_guess, last_hint):
-    """returns a number according to the hint"""
+    """Returns a number according to the last hint
+    Parameters:
+        last_guess: The last guess made by the computer.
+        last_hint: The last hint given to the computer.
+    """
     if last_hint == "too low":
         return random.randint(last_guess+1, 100)
     if last_hint == "too high":
