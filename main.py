@@ -4,11 +4,9 @@ import random
 # Versión Orientada a Objetos (OOP)
 
 class Game:
-    def __init__(self, player_obj, human, computer, hints):
-        self.player = player_obj
+    def __init__(self, human, computer):
         self.human = human
         self.computer = computer
-        self.hints = hints
 
     def start(self):
         num_to_guess = random.randint(1, 100)
@@ -18,12 +16,11 @@ class Game:
     
     def play_turn(self, secret_num):
         human_guess = self.human.make_guess()
-        self.player.guesses.append(human_guess)
         self.check_guess(self.human, human_guess, secret_num)
         if human_guess == secret_num:
             return True
-        computer_guess = self.computer.make_guess(self.hints[-1], self.player.guesses[-1])
-        self.player.guesses.append(computer_guess)
+        computer_guess = self.computer.make_guess(self.computer.hints[-1], self.computer.guesses[-1])
+        self.computer.guesses.append(computer_guess)
         self.check_guess(self.computer, computer_guess, secret_num)
         if computer_guess == secret_num:
             return True
@@ -32,10 +29,10 @@ class Game:
     def check_guess(self, player, guess, secret_num):
         if guess < secret_num:
             print("Wrong, too low!\n")
-            self.hints.append("too low")
+            player.hints.append("too low")
         elif guess > secret_num:
             print("Wrong, too high!\n")
-            self.hints.append("too high")
+            player.hints.append("too high")
         else:
             print(f"Congratulations! {guess} is the secret number :)")
             print("Attempts:", player.guesses[1::])
@@ -51,9 +48,10 @@ class Game:
 class Player:
     def __init__(self):
         self.guesses = [0]
+        self.hints = [""]
         self.min_num = 1
         self.max_num = 100
-
+        
     def make_guess(self):
         pass
     
@@ -82,11 +80,9 @@ class ComputerPlayer(Player):
 
 if __name__ == "__main__":
     while True:
-        hints = []
-        player = Player()
         human_player = HumanPlayer()
         computer = ComputerPlayer()
-        game = Game(player, human_player, computer, hints)
+        game = Game(human_player, computer)
         secret_num = game.start()
         while True:
             did_anyone_guess = game.play_turn(secret_num)
